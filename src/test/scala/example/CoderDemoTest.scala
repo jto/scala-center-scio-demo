@@ -13,7 +13,7 @@ class CoderDemoTest extends PipelineSpec with Inside {
   /**
     * This should be easy. Coder[UserBean] simply check that UserBean is a Java Bean.
     * However, it is important that Coder[UserBean] does NOT fallback.
-    * In other words, javaBeanCoder must higher precedence than Coder.fallback
+    * In other words, javaBeanCoder must have precedence over Coder.fallback
     * @see: https://github.com/spotify/scio/blob/master/scio-core/src/main/scala/com/spotify/scio/coders/instances/JavaCoders.scala#L150
     */
   "Coders" should "Serialize Java beans using a Schema Coder" in {
@@ -26,7 +26,7 @@ class CoderDemoTest extends PipelineSpec with Inside {
   }
 
   /**
-    * Not Coder is defined for the following case classes.
+    * No Coder is defined for the following case classes.
     * Scio should derive them at compile time
     */
   it should "derive coders for product types" in {
@@ -43,7 +43,7 @@ class CoderDemoTest extends PipelineSpec with Inside {
   }
 
   /**
-    * Not Coder is defined for the following hierarchy.
+    * No Coder is defined for the following hierarchy.
     * Scio should derive them at compile time
     */
   it should "derive coders for sealed class hierarchies" in {
@@ -67,13 +67,10 @@ class CoderDemoTest extends PipelineSpec with Inside {
 
   /**
     * When no other option is available, the fallback coder is used.
-    * The compilation must not fail but the compiler issue an "info" telling
-    * the user they should provide a better Coder.
+    * The compilation must not fail but the compiler issue an "info" telling the user they should provide a better Coder.
     * Ideally that info should be a warning.
-    * IMPORTANT (and difficult). The warning message must be issues
-    * _ONLY_ if the fallback coder is used
+    * IMPORTANT (and difficult). The warning message must be issued _ONLY_ if the fallback coder is used
     * (No warning if the compiler "considers" the fallback but ultimately picks another Coder)
-    * ^^^^
     * This is important and was *really* hard to get right.
     * @see https://spotify.github.io/scio/internals/Coders.html for complete doc.
     */
@@ -88,6 +85,7 @@ class CoderDemoTest extends PipelineSpec with Inside {
 
     // The Coder ParameterizedDummy(loc) loc will be derived properly even though loc uses a fallback.
     // The compiler still issues a warning:
+
     // [info]  Warning: No implicit Coder found for the following type:
     // [info]
     // [info]    >> java.util.Locale
